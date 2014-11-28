@@ -13,6 +13,7 @@ var $message = $('.message');
 var $contrast = $('.contrast-example');
 var $colorList = $('.color-list');
 var $charcount = $('.char-count');
+var $keypress = $('.keypress-code');
 
 var wcagBackground = 'ffffff';
 var storageKey = 'rgbto-colors';
@@ -41,6 +42,10 @@ $(document).ready(function () {
 			wcagBackground = currentColor;
 			$contrast.css({'background': '#' + wcagBackground});
 		}
+	});
+
+	$(document).on('keydown', function (e) {
+		$keypress.text(e.keyCode);
 	});
 
 	$('.info-toggle').click(function(){
