@@ -11,6 +11,7 @@ html
 	body
 		.container
 			.color
+				.error
 				input.colorinput(type="text", name="rgbinput", id="rgbinput", placeholder="Paste a value here.")
 			.other
 				.opposite
@@ -21,6 +22,8 @@ html
 				.char-count
 				.keypress key:
 					span.keypress-code
+				.units units:
+					span.units-code
 
 			a.info-toggle(href="#") info
 			.information
@@ -37,6 +40,18 @@ html
 						li HEX - #000000
 						li Adobe #1 - R:0 G:0 B:0
 						li Adobe #2 - (R0 / G0 / B0)
-
+					p It supports converting the following units from/to eachother (where possible):
+					ul
+						li rem (inches)
+						li in (inches)
+						li cm (centimeters)
+						li pc (picas)
+						li mm (milimeters)
+						li pt (points)
+						li px (pixels)
+						li deg (degrees)
+						li rad (radians)
+						li s (seconds)
+						li ms (miliseconds)
 
 		script(src="js/app.js")

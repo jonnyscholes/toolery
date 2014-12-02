@@ -3,17 +3,19 @@ var store = require('store');
 var ntc = require('ntc');
 var WCAGColorContrast = require('WCAGColorContrast');
 var fuzzyColor = require('fuzzy-color');
+var unit = require('css-units');
 
 var $input = $('#rgbinput');
-var $infoContainer = $('.other');
 var $opposite = $('.opposite');
 var $container = $('.container');
 var $sass = $('.sass');
+var $error = $('.error');
 var $message = $('.message');
 var $contrast = $('.contrast-example');
 var $colorList = $('.color-list');
 var $charcount = $('.char-count');
 var $keypress = $('.keypress-code');
+var $units = $('.units-code');
 
 var wcagBackground = 'ffffff';
 var storageKey = 'rgbto-colors';
@@ -49,16 +51,28 @@ $(document).ready(function () {
 	});
 
 	$('.info-toggle').click(function(){
-		$('.information').toggleClass('is-active');
+		$('body').toggleClass('nav-is-active');
 	});
 });
 
 
 function checkAndupdate(value) {
-	var validColor = fuzzyColor(value);
+	var validColor = fuzzyColor(value, 'rgb');
+	var validUnit = findUnit(value);
 
 	if (value) {
 		$container.addClass('has-color');
+	}
+
+	if (validUnit) {
+		var units = convertUnits(value.replace(validUnit, ''), validUnit).map(function(i){
+			if(i.unit === 'px') {
+				return Math.ceil(i.value) + i.unit;
+			} else {
+				return i.value.toFixed(3) + i.unit;
+			}
+		}).join(' ');
+		$units.text(units);
 	}
 
 	if (validColor) {
@@ -97,7 +111,48 @@ function checkAndupdate(value) {
 		$container.removeClass('light-theme dark-theme').addClass(darkOrLight(hexToRgb(hex)));
 	}
 
+	if (!validColor && !validUnit) {
+		$error.show().text('no valid colors or units found');
+	} else {
+		$error.hide();
+	}
+
 	$charcount.text('chars: '+value.length+' words: '+value.split(' ').length);
+}
+
+function convertUnits(value, fromUnit) {
+	var types = ['in', 'cm', 'pc', 'mm', 'pt', 'px', 'deg', 'rad', 's', 'ms', '%', 'em', 'ex'];
+	var returnStrings = [];
+
+	var baselineUnit = unit(value, fromUnit).convertTo('px');
+
+	returnStrings.push({
+		'unit': 'rem',
+		'value': Math.ceil(baselineUnit.value) / 16
+	});
+
+	for (var i = 0; i < types.length; i++) {
+		if (types[i] !== fromUnit) {
+			try {
+				returnStrings.push(unit(value, fromUnit).convertTo(types[i]));
+			}
+			catch (e) {
+				// there is no conversion available between the two units.
+			}
+		}
+	}
+
+	console.log(returnStrings);
+
+	return returnStrings;
+}
+
+function findUnit(str) {
+	var s = str.match(/\d(in|cm|pc|mm|pt|px|deg|rad|s|ms|ex)\b/);
+	if (s) {
+		return s[1];
+	}
+	return false;
 }
 
 
