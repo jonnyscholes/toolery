@@ -69,6 +69,7 @@ function checkAndupdate(value) {
 		switch (validColor.type) {
 			// @todo: Add cmyk / hsl support
 			case 'rgb':
+			case 'rgba':
 				rgb = validColor.string;
 				hex = '#' + rgbToHex(validColor.raw);
 				colorStr = hex;
