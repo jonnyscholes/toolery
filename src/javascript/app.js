@@ -102,7 +102,7 @@ function checkAndupdate(value) {
 
 		// Content
 		$opposite.text(colorStr);
-		$sass.text('$' + ntc.name(hex)[1].toLowerCase().replace(' ', '') + ': ' + hex.toUpperCase()+';');
+		$sass.text('$' + ntc.name(hex)[1].toLowerCase().replace(' ', '') + ': ' + rgb + ';');
 		$message.text(contrastText);
 		$contrast.css({'color': '#'+currentColor, 'background': '#'+wcagBackground});
 
@@ -141,8 +141,6 @@ function convertUnits(value, fromUnit) {
 			}
 		}
 	}
-
-	console.log(returnStrings);
 
 	return returnStrings;
 }
