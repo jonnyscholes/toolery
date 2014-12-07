@@ -4,8 +4,8 @@
 Everyday I need to make lots of little conversions and calculations when taking designs from Photoshop files to the web.
 
 This is a little tool I made to make all of that easier for myself (and perhaps others). The idea is that I should just 
-need to paste my input or type in a single input field and any conceivable conversion would be made for me instantly with 
-no further input.
+have to paste my clipboard or type into in a single input field. Any conceivable conversion would be made for me instantly with 
+no further input. It should do its best to make assumptions about my input - with the knowledge that this is made for front end developers.
 
 Features
 ========
