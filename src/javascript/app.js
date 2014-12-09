@@ -146,7 +146,7 @@ function convertUnits(value, fromUnit) {
 }
 
 function findUnit(str) {
-	var s = str.match(/\d(in|cm|pc|mm|pt|px|deg|rad|s|ms|ex)\b/);
+	var s = str.replace(/\s/g,'').match(/\d(in|cm|pc|mm|pt|px|deg|rad|s|ms|ex)\b/);
 	if (s) {
 		return s[1];
 	}
