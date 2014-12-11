@@ -7,7 +7,7 @@ var port = 9000;
 
 
 gulp.task('default', ['watch', 'connect']);
-gulp.task('build', ['jade', 'styles', 'jshint', 'scripts', 'images']);
+gulp.task('build', ['jade', 'styles', 'jshint', 'scripts', 'images', 'misc']);
 
 
 /*
@@ -19,6 +19,7 @@ gulp.task('watch', ['build'], function () {
 	gulp.watch('src/images/**', ['images']);
 	gulp.watch('src/templates/**', ['jade']);
 	gulp.watch('src/javascript/**', ['jshint', 'scripts']);
+	gulp.watch('src/toolery.appcache', ['misc']);
 	// Note: The browserify task handles js recompiling with watchify
 });
 
@@ -113,6 +114,17 @@ gulp.task('jade', function () {
 
 gulp.task('fonts', function () {
 	return gulp.src(baseSrcDir + 'fonts/*')
+		.pipe(gulp.dest(baseDestDir));
+});
+
+
+/*
+* Move misc files
+* */
+
+
+gulp.task('misc', function () {
+	return gulp.src(baseSrcDir + 'toolery.appcache')
 		.pipe(gulp.dest(baseDestDir));
 });
 
