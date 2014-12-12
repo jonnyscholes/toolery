@@ -56,6 +56,8 @@ Shows the key code for the last pressed key.
 
 Shows the amount of characters and words in the input field.
 
+## Works offline
+
 If you think of anything it needs submit an issue :)
 
 License

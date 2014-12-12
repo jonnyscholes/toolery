@@ -5,6 +5,8 @@ var WCAGColorContrast = require('WCAGColorContrast');
 var fuzzyColor = require('fuzzy-color');
 var unit = require('css-units');
 
+var utils = require('./includes/util.js');
+
 var $input = $('#rgbinput');
 var $opposite = $('.opposite');
 var $container = $('.container');
@@ -58,7 +60,7 @@ $(document).ready(function () {
 
 function checkAndupdate(value) {
 	var validColor = fuzzyColor(value, 'rgb');
-	var validUnit = findUnit(value);
+	var validUnit = utils.findUnit(value);
 
 	if (value) {
 		$container.addClass('has-color');
@@ -85,11 +87,11 @@ function checkAndupdate(value) {
 			case 'rgb':
 			case 'rgba':
 				rgb = validColor.string;
-				hex = '#' + rgbToHex(validColor.raw);
+				hex = '#' + utils.rgbToHex(validColor.raw);
 				colorStr = hex;
 				break;
 			case 'hex':
-				rgb = hexToRgb(validColor.string, true);
+				rgb = utils.hexToRgb(validColor.string, true);
 				hex = validColor.string;
 				colorStr = rgb;
 				break;
@@ -108,7 +110,7 @@ function checkAndupdate(value) {
 
 		// Style
 		$container.css('background', validColor.string);
-		$container.removeClass('light-theme dark-theme').addClass(darkOrLight(hexToRgb(hex)));
+		$container.removeClass('light-theme dark-theme').addClass(utils.darkOrLight(utils.hexToRgb(hex)));
 	}
 
 	if (!validColor && !validUnit) {
@@ -145,15 +147,6 @@ function convertUnits(value, fromUnit) {
 	return returnStrings;
 }
 
-function findUnit(str) {
-	var s = str.replace(/\s/g,'').match(/\d(in|cm|pc|mm|pt|px|deg|rad|s|ms|ex)\b/);
-	if (s) {
-		return s[1];
-	}
-	return false;
-}
-
-
 function updateColorStore(newColor) {
 	colorList = store.get(storageKey);
 
@@ -178,37 +171,4 @@ function updateColorListHtml(colors) {
 		html.push($('<a href="#"/>').css('background', colors[i]).attr('data-color', colors[i]));
 	}
 	$colorList.html(html);
-}
-
-
-function hexToRgb(hex, asString) {
-	var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-	hex = hex.replace(shorthandRegex, function (m, r, g, b) {
-		return r + r + g + g + b + b;
-	});
-
-	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-	if (asString) {
-		return result ? 'rgb(' + parseInt(result[1], 16) + ', ' + parseInt(result[2], 16) + ', ' + parseInt(result[3], 16) + ')' : null;
-	} else {
-		return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : null;
-	}
-}
-
-
-function rgbToHex(rgb) {
-	return ((1 << 24) + (parseInt(rgb[0], 10) << 16) + (parseInt(rgb[1], 10) << 8) + parseInt(rgb[2], 10)).toString(16).slice(1);
-}
-
-
-function darkOrLight(rgb) {
-	var brightness;
-	brightness = (parseInt(rgb[0], 10) * 299) + (parseInt(rgb[1], 10) * 587) + parseInt((rgb[2], 10) * 114);
-	brightness = brightness / 255000;
-
-	if (brightness >= 0.5) {
-		return 'dark-theme';
-	} else {
-		return 'light-theme';
-	}
 }

@@ -41,7 +41,8 @@
 	"dependencies": {
 		"jquery": "~1.11.1",
 		"fuzzy-color": "~0.0.5",
-		"css-units": "~0.0.1"
+		"css-units": "~0.0.1",
+		"color-scheme": "0.0.5"
 	},
 	"scripts": {
 		"start": "gulp"
