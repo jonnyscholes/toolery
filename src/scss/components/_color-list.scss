@@ -1,0 +1,14 @@
+.color-list {
+	width: 100%;
+	text-align: center;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-around;
+
+	a {
+		display: block;
+		list-style: none;
+		height: 20px;
+		flex-grow: 1;
+	}
+}

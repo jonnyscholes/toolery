@@ -1,0 +1,19 @@
+.error {
+	display: none;
+	position: absolute;
+	top: 135%;
+	background: rgba(black, 0.2);
+	color: white;
+	&:before {
+		content: '';
+		width: 0;
+		height: 0;
+		border-left: 20px solid transparent;
+		border-right: 20px solid transparent;
+		border-bottom: 10px solid rgba(black, 0.2);
+		position: absolute;
+		bottom: 100%;
+		left: 50%;
+		margin-left: -20px;
+	}
+}

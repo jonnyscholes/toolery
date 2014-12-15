@@ -1,0 +1,43 @@
+.light-theme {
+	.information,
+	a,
+	a:visited,
+	a:active {
+		color: rgba(white, 0.8);
+	}
+	.other {
+		color: white;
+	}
+	.color {
+		border: 5px solid rgba(white, 0.2);
+	}
+	.error {
+		background: rgba(white, 0.2);
+		color: black;
+		&:before {
+			border-bottom-color: rgba(white, 0.2);
+		}
+	}
+}
+
+.dark-theme {
+	.information,
+	a,
+	a:visited,
+	a:active {
+		color: rgba(black, 0.8);
+	}
+	.other {
+		color: black;
+	}
+	.color {
+		border: 5px solid rgba(black, 0.2);
+	}
+	.error {
+		background: rgba(black, 0.2);
+		color: white;
+		&:before {
+			border-bottom-color: rgba(black, 0.2);
+		}
+	}
+}

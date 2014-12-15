@@ -1,0 +1,20 @@
+.paste-zone {
+	transition: all 300ms linear;
+	border: 5px solid rgba(black, 0.2);
+	text-align: center;
+	position: absolute;
+	z-index: 5;
+	top: 100px;
+	left: 50%;
+	transform: translateX(-50%);
+	&--input {
+		display: block;
+		border: 0 none;
+		padding: 20px 20px 20px 20px;
+		text-align: center;
+	}
+	.nav-is-active & {
+		z-index: 1;
+		opacity: 0;
+	}
+}

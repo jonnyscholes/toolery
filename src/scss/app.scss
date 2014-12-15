@@ -27,165 +27,27 @@ a:active {
 	left: 0;
 	width: 100%;
 	height: 100%;
+	display: flex;
+	align-items: flex-end;
+	flex-wrap: wrap;
+	&--row {
+		flex-shrink: 1;
+		width: 100%;
+	}
 }
-
-
-	.light-theme {
-		.information,
-		a,
-		a:visited,
-		a:active {
-			color: rgba(white, 0.8);
-		}
-		.other {
-			color: white;
-		}
-		.color {
-			border: 5px solid rgba(white, 0.2);
-		}
-		.error {
-			background: rgba(white, 0.2);
-			color: black;
-			&:before {
-				border-bottom-color: rgba(white, 0.2);
-			}
-		}
-	}
-	.dark-theme {
-		.information,
-		a,
-		a:visited,
-		a:active {
-			color: rgba(black, 0.8);
-		}
-		.other {
-			color: black;
-		}
-		.color {
-			border: 5px solid rgba(black, 0.2);
-		}
-		.error {
-			background: rgba(black, 0.2);
-			color: white;
-			&:before {
-				border-bottom-color: rgba(black, 0.2);
-			}
-		}
-	}
-
-
-
-	.color {
-		transition: all 300ms linear;
-		border: 5px solid rgba(black, 0.2);
-		text-align: center;
-		position: absolute;
-		z-index: 5;
-		top: 100px;
-		left: 50%;
-		transform: translateX(-50%);
-	}
-		.error {
-			display: none;
-			position: absolute;
-			top: 135%;
-			background: rgba(black, 0.2);
-			color: white;
-			&:before {
-				content: '';
-				width: 0;
-				height: 0;
-				border-left: 20px solid transparent;
-				border-right: 20px solid transparent;
-				border-bottom: 10px solid rgba(black, 0.2);
-				position: absolute;
-				bottom: 100%;
-				left: 50%;
-				margin-left: -20px;
-			}
-		}
-		.colorinput {
-			display: block;
-			border: 0 none;
-			padding: 20px 20px 20px 20px;
-			text-align: center;
-		}
-
-
-	.other {
-		transition: all 300ms linear;
-		z-index: 5;
-		opacity: 0;
-		font-size: 2em;
-		position: absolute;
-		width: 100%;
-		bottom: 100px;
-		text-align: center;
-		.has-color & {
-			opacity: 1;
-		}
-	}
-		.sass,
-		.opposite,
-		.message,
-		.char-count,
-		.keypress,
-		.units {
-			opacity: 0.7;
-		}
-		.opposite {
-			text-transform: uppercase;
-		}
-		.color-list {
-			text-align: center;
-			a {
-				display: inline-block;
-				list-style: none;
-				height: 20px;
-				width: 20px;
-			}
-		}
-
-	.info-toggle {
-		position: absolute;
-		bottom: 10px;
-		right: 10px;
-		z-index: 10;
-	}
-
-	.information {
-		transition: all 300ms linear;
-		opacity: 0;
-		overflow: hidden;
-		z-index: 1;
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		left: 0;
-		text-align: left;
-		section {
-			box-sizing: border-box;
-			padding: 40px;
-			width: 50%;
-			float: left;
-			clear: right;
-		}
-		ul {
-			margin: 0;
-			padding-left: 20px;
-		}
+	.opposite {
+		text-transform: uppercase;
 	}
 
 	.nav-is-active {
-		.information {
-			z-index: 5;
-			opacity: 1;
-		}
-
-		.color,
 		.other {
 			z-index: 1;
 			opacity: 0;
 		}
 	}
+
+@import "components/color-list";
+@import "components/error";
+@import "components/information";
+@import "components/theme";
+@import "components/paste-zone";

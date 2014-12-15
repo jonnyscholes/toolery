@@ -4,20 +4,31 @@ var ntc = require('ntc');
 var WCAGColorContrast = require('WCAGColorContrast');
 var fuzzyColor = require('fuzzy-color');
 var unit = require('css-units');
+var ColorScheme = require('color-scheme');
 
 var utils = require('./includes/util.js');
 
-var $input = $('#rgbinput');
-var $opposite = $('.opposite');
-var $container = $('.container');
-var $sass = $('.sass');
+// UI
 var $error = $('.error');
-var $message = $('.message');
-var $contrast = $('.contrast-example');
-var $colorList = $('.color-list');
-var $charcount = $('.char-count');
-var $keypress = $('.keypress-code');
-var $units = $('.units-code');
+var $input = $('#rgbinput');
+var $container = $('.container');
+
+// WCAG
+var $wcag = $('.js-wcag');
+var $wcagContrast = $('.js-wcag-example');
+
+// Color
+var $colorList = $('.js-color-list');
+var $colorVariable = $('.js-color-variable');
+var $colorTable = $('.js-color-table');
+
+// Units
+var $units = $('.js-unit-conversions');
+
+// Misc
+var $charCount = $('.js-char-count');
+var $wordCount = $('.js-word-count');
+var $keypress = $('.js-key-code');
 
 var wcagBackground = 'ffffff';
 var storageKey = 'rgbto-colors';
@@ -103,10 +114,11 @@ function checkAndupdate(value) {
 		var contrastText = WCAGColorContrast.ratio(currentColor, wcagBackground) >= 7 ? 'WCAG Pass' : 'WCAG Fail';
 
 		// Content
-		$opposite.text(colorStr);
-		$sass.text('$' + ntc.name(hex)[1].toLowerCase().replace(' ', '') + ': ' + rgb + ';');
-		$message.text(contrastText);
-		$contrast.css({'color': '#'+currentColor, 'background': '#'+wcagBackground});
+		$colorTable.text(colorStr);
+		$colorVariable.text('$' + ntc.name(hex)[1].toLowerCase().replace(' ', '') + ': ' + rgb + ';');
+
+		$wcag.text(contrastText);
+		$wcagContrast.css({'color': '#'+currentColor, 'background': '#'+wcagBackground});
 
 		// Style
 		$container.css('background', validColor.string);
@@ -119,7 +131,8 @@ function checkAndupdate(value) {
 		$error.hide();
 	}
 
-	$charcount.text('chars: '+value.length+' words: '+value.split(' ').length);
+	$charCount.text(value.length+' chars');
+	$wordCount.text(value.split(' ').length+' words');
 }
 
 function convertUnits(value, fromUnit) {
