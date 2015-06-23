@@ -11,6 +11,8 @@ body {
 	background-size:60px 60px;
 	background-position:0 0, 30px 30px;
 	font-family: 'Source Code Pro', serif;
+	color: rgba(black, 0.8);
+	font-size: 1.2em;
 }
 
 a,
@@ -30,9 +32,14 @@ a:active {
 	display: flex;
 	align-items: flex-end;
 	flex-wrap: wrap;
+	align-content: flex-end;
 	&--row {
 		flex-shrink: 1;
 		width: 100%;
+		margin-top: 20px;
+	}
+	&--row-title {
+		font-weight: bold;
 	}
 }
 	.opposite {
@@ -46,7 +53,13 @@ a:active {
 		}
 	}
 
+.wcag--example {
+	font-size: 16px;
+	padding: .5rem 0;
+}
+
 @import "components/color-list";
+@import "components/data-table";
 @import "components/error";
 @import "components/information";
 @import "components/theme";

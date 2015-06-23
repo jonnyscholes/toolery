@@ -4,11 +4,43 @@
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: space-around;
-
-	a {
+	margin-top: 200px;
+	&--item {
 		display: block;
 		list-style: none;
 		height: 20px;
 		flex-grow: 1;
+		position: relative;
+	}
+		&--item-cover {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+}
+
+.color-scheme {
+	box-sizing: border-box;
+	padding: 0 5%;
+	position: absolute;
+	bottom: 100%;
+	left: 0;
+	width: 25%;
+
+	&:nth-child(2) {
+		left: 25%;
+	}
+	&:nth-child(3) {
+		left: 50%;
+	}
+	&:nth-child(4) {
+		left: 75%;
+	}
+	&--item {
+		width: 100%;
+		height: 10px;
+		display: block;
 	}
 }

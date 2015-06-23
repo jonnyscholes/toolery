@@ -14,33 +14,28 @@ html(manifest="toolery.appcache")
 			input.paste-zone--input(type="text", name="rgbinput", id="rgbinput", placeholder="Paste a value here.")
 
 		.container
-			//.other
-			//	.message
-			//	.contrast-example The quick brown fox jumped over the lazy dog.
-			//	.char-count
-			//	.keypress key:
-			//		span.keypress-code
-
 			.container--row.wcag
-				.wcag--title.js-wcag
-				.wcag--example.js-wcag-example
+				.wcag--title.container--row-title WCAG
+				.wcag--title.js-wcag-result
+				.wcag--example.js-wcag-example The five boxing wizards jump quickly
 
 			.container--row.unit-conversions
-				.unit-conversions--title units:
-				.unit-conversions--table.js-unit-conversions
-
-			.container--row.color-variable.js-color-variable
+				.unit-conversions--title.container--row-title Units
+				.unit-conversions--table.data-table.js-unit-conversions
+					.data-table--cell -
 
 			.container--row.color-conversions
-				.color-conversions--title colors:
-				.color-conversions--table.js-color-table
+				.color-conversions--title.container--row-title Colors
+				.color-conversions--variable.js-color-variable
+				.color-conversions--table.data-table.js-color-table
+					.data-table--cell -
 
 			.container--row.misc-metrics
-				.misc-metrics--title misc:
-				.misc-metrics--table
-					.misc-metrics--table-single.js-char-count
-					.misc-metrics--table-single.js-word-count
-					.misc-metrics--table-single.js-key-code
+				.misc-metrics--title.container--row-title Other
+				.misc-metrics--table.data-table
+					.misc-metrics--table-single.data-table--cell.js-char-count
+					.misc-metrics--table-single.data-table--cell.js-word-count
+					.misc-metrics--table-single.data-table--cell.js-key-code
 
 			.container--row.color-list.js-color-list
 

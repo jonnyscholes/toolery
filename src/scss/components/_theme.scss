@@ -1,13 +1,6 @@
 .light-theme {
-	.information,
-	a,
-	a:visited,
-	a:active {
-		color: rgba(white, 0.8);
-	}
-	.other {
-		color: white;
-	}
+	color: rgba(white, 0.8);
+
 	.color {
 		border: 5px solid rgba(white, 0.2);
 	}
@@ -21,15 +14,8 @@
 }
 
 .dark-theme {
-	.information,
-	a,
-	a:visited,
-	a:active {
-		color: rgba(black, 0.8);
-	}
-	.other {
-		color: black;
-	}
+	color: rgba(black, 0.8);
+
 	.color {
 		border: 5px solid rgba(black, 0.2);
 	}

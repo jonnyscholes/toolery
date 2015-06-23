@@ -1,12 +1,18 @@
 var $ = require('jquery');
+
 var store = require('store');
-var ntc = require('ntc');
+
 var WCAGColorContrast = require('WCAGColorContrast');
-var fuzzyColor = require('fuzzy-color');
+
 var unit = require('css-units');
+
+var ntc = require('ntc');
+var fuzzyColor = require('fuzzy-color');
+var colorConvert = require('color-convert')();
 var ColorScheme = require('color-scheme');
 
 var utils = require('./includes/util.js');
+
 
 // UI
 var $error = $('.error');
@@ -14,7 +20,7 @@ var $input = $('#rgbinput');
 var $container = $('.container');
 
 // WCAG
-var $wcag = $('.js-wcag');
+var $wcag = $('.js-wcag-result');
 var $wcagContrast = $('.js-wcag-example');
 
 // Color
@@ -31,7 +37,7 @@ var $wordCount = $('.js-word-count');
 var $keypress = $('.js-key-code');
 
 var wcagBackground = 'ffffff';
-var storageKey = 'rgbto-colors';
+var storageKey = 'rgbto-colors-v2';
 var currentColor;
 var colorList = [];
 
@@ -52,15 +58,15 @@ $(document).ready(function () {
 		e.preventDefault();
 	});
 
-	$contrast.click(function (e) {
+	$wcagContrast.click(function (e) {
 		if (currentColor) {
 			wcagBackground = currentColor;
-			$contrast.css({'background': '#' + wcagBackground});
+			$wcagContrast.css({'background': '#' + wcagBackground});
 		}
 	});
 
 	$(document).on('keydown', function (e) {
-		$keypress.text(e.keyCode);
+		$keypress.text(e.keyCode + '  e.keyCode');
 	});
 
 	$('.info-toggle').click(function(){
@@ -84,13 +90,15 @@ function checkAndupdate(value) {
 			} else {
 				return i.value.toFixed(3) + i.unit;
 			}
-		}).join(' ');
-		$units.text(units);
+		});
+
+		updateUnitTable(units);
 	}
 
 	if (validColor) {
 		var hex;
 		var rgb;
+		var rgbRaw;
 		var colorStr;
 
 		switch (validColor.type) {
@@ -98,29 +106,30 @@ function checkAndupdate(value) {
 			case 'rgb':
 			case 'rgba':
 				rgb = validColor.string;
+				rgbRaw = validColor.raw;
 				hex = '#' + utils.rgbToHex(validColor.raw);
 				colorStr = hex;
 				break;
 			case 'hex':
 				rgb = utils.hexToRgb(validColor.string, true);
+				rgbRaw = utils.hexToRgb(validColor.string, false);
 				hex = validColor.string;
 				colorStr = rgb;
 				break;
 		}
 
 		currentColor = hex.replace('#', '');
-		updateColorStore(rgb);
+		updateColorStore(rgbRaw, rgb);
 
-		var contrastText = WCAGColorContrast.ratio(currentColor, wcagBackground) >= 7 ? 'WCAG Pass' : 'WCAG Fail';
-
-		// Content
-		$colorTable.text(colorStr);
+		// Colors
 		$colorVariable.text('$' + ntc.name(hex)[1].toLowerCase().replace(' ', '') + ': ' + rgb + ';');
+		updateColorTable(rgb, rgbRaw, hex);
 
-		$wcag.text(contrastText);
+		// WCAG
+		$wcag.text(wcagResultString(currentColor, wcagBackground));
 		$wcagContrast.css({'color': '#'+currentColor, 'background': '#'+wcagBackground});
 
-		// Style
+		// UI
 		$container.css('background', validColor.string);
 		$container.removeClass('light-theme dark-theme').addClass(utils.darkOrLight(utils.hexToRgb(hex)));
 	}
@@ -133,6 +142,76 @@ function checkAndupdate(value) {
 
 	$charCount.text(value.length+' chars');
 	$wordCount.text(value.split(' ').length+' words');
+}
+
+
+function updateUnitTable(units) {
+	$units.html('');
+	units.forEach(function(el){
+		$units.append($('<div class="unit-conversions--table-single data-table--cell" />').text(el));
+	});
+}
+
+function updateColorTable(rgb, rgbRaw, hex) {
+	$colorTable.html('');
+	$colorTable
+		.append($('<div class="color-conversions--table-single data-table--cell" />')
+			.text(rgb));
+	$colorTable
+		.append($('<div class="color-conversions--table-single data-table--cell" />')
+			.text(hex));
+	$colorTable
+		.append($('<div class="color-conversions--table-single data-table--cell" />')
+			.text('hsl('+colorConvert.rgb(rgbRaw.slice(0,3)).hsl().join(',')+')'));
+	$colorTable
+		.append($('<div class="color-conversions--table-single data-table--cell" />')
+			.text('cmyk('+colorConvert.rgb(rgbRaw.slice(0,3)).cmyk().join(',')+')'));
+}
+
+function updateColorListHtml(colors) {
+	var html = [];
+
+	for (var i = 0; i < colors.length-1; i++) {
+		var el = $('<div class="color-list--item"/>');
+		el.append($('<a class="color-list--item-cover" href="#"/>')
+			.css('background', colors[i].string)
+			.attr('data-color', colors[i].raw));
+
+		el.append(createColorSchemeHtml(colors[i].raw, 'triade'));
+		el.append(createColorSchemeHtml(colors[i].raw, 'mono'));
+		el.append(createColorSchemeHtml(colors[i].raw, 'contrast'));
+		el.append(createColorSchemeHtml(colors[i].raw, 'tetrade'));
+		html.push(el);
+	}
+	$colorList.html(html);
+}
+
+function createColorSchemeHtml(color, scheme) {
+	var scm = new ColorScheme();
+	var clrs = scm.from_hue(colorConvert.rgb(color.slice(0,3)).hsl()[0]).scheme(scheme).colors();
+	var shtml = $('<div class="color-scheme"/>');
+
+	clrs.forEach(function(c){
+		shtml.append($('<a class="color-scheme--item" href="#"/>').css('background', '#'+c).attr('data-color', c));
+	});
+
+	return shtml;
+}
+
+function rgbToString(rgb) {
+	return rgb.length === 3 ? 'rgb('+rgb.join(',')+')' : 'rgba('+rgb.join(',')+')';
+}
+
+function wcagResultString(wcagForeground, wcagBackground) {
+	// >= 7 on 16px normal === AAA
+	// >= 4.5 on 16px bold === AAA
+
+	// >= 4.5 on 16px normal === AA
+	// >= 3 on 16px bold === AA
+
+	var s = WCAGColorContrast.ratio(wcagForeground, wcagBackground) >= 7 ? ' AAA Pass' : ' AAA Fail';
+	s = WCAGColorContrast.ratio(wcagForeground, wcagBackground) >= 4.5 ? s+'  AA Pass' : s+' AA Fail';
+	return 'WCAG ' + s;
 }
 
 function convertUnits(value, fromUnit) {
@@ -160,28 +239,19 @@ function convertUnits(value, fromUnit) {
 	return returnStrings;
 }
 
-function updateColorStore(newColor) {
+
+function updateColorStore(newColor, newColorString) {
 	colorList = store.get(storageKey);
 
 	if (colorList) {
 		colorList = JSON.parse(store.get(storageKey));
-
-		if(newColor && colorList.indexOf(newColor) === -1) {
-			colorList.push(newColor);
+		if(newColor && colorList.map(function (elm) {return elm.string;}).indexOf(newColorString) === -1) {
+			colorList.push({raw: newColor, string: newColorString});
 		}
 		store.set(storageKey, JSON.stringify(colorList));
 		updateColorListHtml(colorList);
 	} else {
-		store.set(storageKey, JSON.stringify([newColor]));
-		updateColorListHtml([newColor]);
+		store.set(storageKey, JSON.stringify([{raw: newColor, string: newColorString}]));
+		updateColorListHtml({raw: newColor, string: newColorString});
 	}
-}
-
-
-function updateColorListHtml(colors) {
-	var html = [];
-	for (var i = 0; i < colors.length-1; i++) {
-		html.push($('<a href="#"/>').css('background', colors[i]).attr('data-color', colors[i]));
-	}
-	$colorList.html(html);
 }
